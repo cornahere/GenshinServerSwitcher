@@ -94,6 +94,7 @@ namespace GenshinServerSwitcher
             this.about.TabIndex = 5;
             this.about.Text = "关于";
             this.about.UseVisualStyleBackColor = true;
+            this.about.Click += new System.EventHandler(this.OpenAboutPage);
             // 
             // MainForm
             // 
@@ -104,9 +105,10 @@ namespace GenshinServerSwitcher
             this.Controls.Add(this.pathText);
             this.Controls.Add(this.selectPath);
             this.Controls.Add(this.switchServer);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "原神 服务器切换器";
             this.ResumeLayout(false);
@@ -202,6 +204,13 @@ namespace GenshinServerSwitcher
             }
 
             CheckStatus();
+        }
+
+        private void OpenAboutPage(object sender, EventArgs e)
+        {
+            AboutPage about = new AboutPage();
+            about.Size = new System.Drawing.Size(470, 160);
+            about.Show();
         }
     }
 }
