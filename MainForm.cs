@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace GenshinServerSwitcher
@@ -10,6 +11,7 @@ namespace GenshinServerSwitcher
         private TextBox pathText;
         private Label serverStatus;
         private Button startGame;
+        private Button about;
         private Button switchServer;
 
         public MainForm()
@@ -27,6 +29,7 @@ namespace GenshinServerSwitcher
             this.pathText = new System.Windows.Forms.TextBox();
             this.serverStatus = new System.Windows.Forms.Label();
             this.startGame = new System.Windows.Forms.Button();
+            this.about = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // switchServer
@@ -45,7 +48,7 @@ namespace GenshinServerSwitcher
             this.selectPath.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.selectPath.Location = new System.Drawing.Point(13, 40);
             this.selectPath.Name = "selectPath";
-            this.selectPath.Size = new System.Drawing.Size(299, 27);
+            this.selectPath.Size = new System.Drawing.Size(218, 27);
             this.selectPath.TabIndex = 1;
             this.selectPath.Text = "重选游戏路径";
             this.selectPath.UseVisualStyleBackColor = true;
@@ -82,9 +85,20 @@ namespace GenshinServerSwitcher
             this.startGame.UseVisualStyleBackColor = false;
             this.startGame.Click += new System.EventHandler(this.StartGame);
             // 
+            // about
+            // 
+            this.about.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.about.Location = new System.Drawing.Point(237, 40);
+            this.about.Name = "about";
+            this.about.Size = new System.Drawing.Size(75, 27);
+            this.about.TabIndex = 5;
+            this.about.Text = "关于";
+            this.about.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.ClientSize = new System.Drawing.Size(324, 195);
+            this.Controls.Add(this.about);
             this.Controls.Add(this.startGame);
             this.Controls.Add(this.serverStatus);
             this.Controls.Add(this.pathText);
@@ -130,8 +144,12 @@ namespace GenshinServerSwitcher
             }
         }
 
+        /// <summary>
+        /// 启动游戏
+        /// </summary>
         private void StartGame(object sender, EventArgs e)
         {
+            Process launcher = Process.Start($"{pathText.Text}\\launcher.exe");
             Environment.Exit(0);
         }
 
