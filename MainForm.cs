@@ -38,6 +38,7 @@ namespace GenshinServerSwitcher
             this.switchServer.TabIndex = 0;
             this.switchServer.Text = "切换服务器";
             this.switchServer.UseVisualStyleBackColor = true;
+            this.switchServer.Click += new System.EventHandler(this.SwitchServer);
             // 
             // selectPath
             // 
@@ -148,6 +149,41 @@ namespace GenshinServerSwitcher
                 string status = INI.Read("launcher", "cps", string.Empty, $"{this.pathText.Text}\\config.ini");
                 serverStatus.Text = (status == "mihoyo") ? "天空岛（米哈游）" : "世界树（B站）";
             }
+        }
+
+        /// <summary>
+        /// 切换服务器
+        /// </summary>
+        private void SwitchServer(object sender, EventArgs e)
+        {
+            if (!System.IO.File.Exists($"{this.pathText.Text}\\config.ini"))
+                return;
+
+            string ini1 = $"{this.pathText.Text}\\config.ini";
+            string ini2 = $"{this.pathText.Text}\\Genshin Impact Game\\config.ini";
+
+            if (INI.Read("launcher", "cps", string.Empty, ini1) == "mihoyo")
+            {
+                // 将启动信息修改为 世界树
+                INI.Write("launcher", "cps", "bilibili", ini1);
+                INI.Write("launcher", "channel", "14", ini1);
+                INI.Write("launcher", "sub_channel", "0", ini1);
+                INI.Write("General", "cps", "bilibili", ini2);
+                INI.Write("General", "channel", "14", ini2);
+                INI.Write("General", "sub_channel", "0", ini2);
+            }
+            else
+            {
+                // 将启动信息修改为 天空岛
+                INI.Write("launcher", "cps", "mihoyo", ini1);
+                INI.Write("launcher", "channel", "1", ini1);
+                INI.Write("launcher", "sub_channel", "1", ini1);
+                INI.Write("General", "cps", "mihoyo", ini2);
+                INI.Write("General", "channel", "1", ini2);
+                INI.Write("General", "sub_channel", "1", ini2);
+            }
+
+            CheckStatus();
         }
     }
 }
