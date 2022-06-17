@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace GenshinServerSwitcher
@@ -9,13 +8,14 @@ namespace GenshinServerSwitcher
     {
         private Button selectPath;
         private TextBox pathText;
-        private Label label1;
+        private Label serverStatus;
         private Button startGame;
         private Button switchServer;
 
         public MainForm()
         {
             InitializeComponent();
+            CheckStatus();
         }
 
         private void InitializeComponent()
@@ -24,7 +24,7 @@ namespace GenshinServerSwitcher
             this.switchServer = new System.Windows.Forms.Button();
             this.selectPath = new System.Windows.Forms.Button();
             this.pathText = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.serverStatus = new System.Windows.Forms.Label();
             this.startGame = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -43,7 +43,7 @@ namespace GenshinServerSwitcher
             this.selectPath.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.selectPath.Location = new System.Drawing.Point(13, 40);
             this.selectPath.Name = "selectPath";
-            this.selectPath.Size = new System.Drawing.Size(266, 27);
+            this.selectPath.Size = new System.Drawing.Size(299, 27);
             this.selectPath.TabIndex = 1;
             this.selectPath.Text = "重选游戏路径";
             this.selectPath.UseVisualStyleBackColor = true;
@@ -54,19 +54,18 @@ namespace GenshinServerSwitcher
             this.pathText.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.pathText.Location = new System.Drawing.Point(13, 13);
             this.pathText.Name = "pathText";
-            this.pathText.Text = GetGamePath();
-            this.pathText.Size = new System.Drawing.Size(266, 21);
+            this.pathText.Size = new System.Drawing.Size(299, 21);
             this.pathText.TabIndex = 2;
             // 
-            // label1
+            // serverStatus
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(163, 87);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 16);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Test Server";
+            this.serverStatus.AutoSize = true;
+            this.serverStatus.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.serverStatus.Location = new System.Drawing.Point(163, 87);
+            this.serverStatus.Name = "serverStatus";
+            this.serverStatus.Size = new System.Drawing.Size(151, 16);
+            this.serverStatus.TabIndex = 3;
+            this.serverStatus.Text = "没有检测到游戏文件";
             // 
             // startGame
             // 
@@ -75,16 +74,17 @@ namespace GenshinServerSwitcher
             this.startGame.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.startGame.Location = new System.Drawing.Point(13, 125);
             this.startGame.Name = "startGame";
-            this.startGame.Size = new System.Drawing.Size(273, 58);
+            this.startGame.Size = new System.Drawing.Size(299, 58);
             this.startGame.TabIndex = 4;
             this.startGame.Text = "开始游戏";
             this.startGame.UseVisualStyleBackColor = false;
+            this.startGame.Click += new System.EventHandler(this.StartGame);
             // 
             // MainForm
             // 
-            this.ClientSize = new System.Drawing.Size(298, 195);
+            this.ClientSize = new System.Drawing.Size(324, 195);
             this.Controls.Add(this.startGame);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.serverStatus);
             this.Controls.Add(this.pathText);
             this.Controls.Add(this.selectPath);
             this.Controls.Add(this.switchServer);
@@ -122,7 +122,31 @@ namespace GenshinServerSwitcher
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
-                this.pathText.Text = dialog.SelectedPath;
+            {
+                pathText.Text = dialog.SelectedPath;
+                CheckStatus();
+            }
+        }
+
+        private void StartGame(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// 检查游戏服务器情况
+        /// </summary>
+        private void CheckStatus()
+        {
+            if (!System.IO.File.Exists($"{this.pathText.Text}\\config.ini"))
+            {
+                serverStatus.Text = "没有检测到游戏文件";
+            }
+            else
+            {
+                string status = INI.Read("launcher", "cps", string.Empty, $"{this.pathText.Text}\\config.ini");
+                serverStatus.Text = (status == "mihoyo") ? "天空岛（米哈游）" : "世界树（B站）";
+            }
         }
     }
 }
