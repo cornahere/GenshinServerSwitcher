@@ -15,6 +15,7 @@ namespace GenshinServerSwitcher
         public MainForm()
         {
             InitializeComponent();
+            pathText.Text = GetGamePath();
             CheckStatus();
         }
 
