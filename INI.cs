@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace GenshinServerSwitcher
 {
+    /// <summary>
+    /// INI 读写操作
+    /// </summary>
     internal class INI
     {
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]

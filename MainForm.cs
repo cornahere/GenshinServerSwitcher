@@ -176,6 +176,7 @@ namespace GenshinServerSwitcher
         /// </summary>
         private void SwitchServer(object sender, EventArgs e)
         {
+            // 检查以确保游戏信息正常
             if (!System.IO.File.Exists($"{this.pathText.Text}\\config.ini"))
                 return;
 
@@ -203,9 +204,13 @@ namespace GenshinServerSwitcher
                 INI.Write("General", "sub_channel", "1", ini2);
             }
 
+            // 更改后更新服务器信息防止误导
             CheckStatus();
         }
 
+        /// <summary>
+        /// 打开“关于页”窗口
+        /// </summary>
         private void OpenAboutPage(object sender, EventArgs e)
         {
             AboutPage about = new AboutPage();

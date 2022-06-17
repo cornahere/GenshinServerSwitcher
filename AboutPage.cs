@@ -2,6 +2,9 @@
 
 namespace GenshinServerSwitcher
 {
+    /// <summary>
+    /// 关于页面
+    /// </summary>
     internal class AboutPage : Form
     {
         private Label copyright;
@@ -75,6 +78,9 @@ namespace GenshinServerSwitcher
 
         }
 
+        /// <summary>
+        /// 打开开源页面
+        /// </summary>
         private void OpenWebsite(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/Hidden-Corner/GenshinServerSwitcher");
