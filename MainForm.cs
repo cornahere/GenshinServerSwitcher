@@ -122,15 +122,21 @@ namespace GenshinServerSwitcher
         /// <returns></returns>
         private string GetGamePath()
         {
-            RegistryKey localMachineRegistry
-            = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,
-                                      Environment.Is64BitOperatingSystem
-                                          ? RegistryView.Registry64
-                                          : RegistryView.Registry32);
+            try
+            {
+                RegistryKey localMachineRegistry = RegistryKey.OpenBaseKey(
+                    RegistryHive.LocalMachine,
+                    Environment.Is64BitOperatingSystem
+                        ? RegistryView.Registry64
+                        : RegistryView.Registry32);
 
-            return string.IsNullOrEmpty("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\原神")
-                ? string.Empty
-                : localMachineRegistry.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\原神").GetValue("InstallPath").ToString();
+                return localMachineRegistry.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\原神").GetValue("InstallPath").ToString();
+            }
+            catch (NullReferenceException nre)
+            {
+                // 没有找到注册表 => 返回空值
+                return String.Empty;
+            }
         }
 
         /// <summary>
